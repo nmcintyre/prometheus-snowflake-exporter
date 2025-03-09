@@ -39,7 +39,7 @@ var (
 	username           = kingpin.Flag("username", "The username for the user used when querying metrics.").Envar("SNOWFLAKE_EXPORTER_USERNAME").Required().String()
 	password           = kingpin.Flag("password", "The password for the user used when querying metrics.").Envar("SNOWFLAKE_EXPORTER_PASSWORD").String()
 	privateKeyPath     = kingpin.Flag("private-key-path", "The path to the user's RSA private key").Envar("SNOWFLAKE_EXPORTER_PRIVATE_KEY_PATH").String()
-	privateKeyPassword = kingpin.Flag("private-key-password", "The password for the user's RSA private key.").Envar("SNOWFLAKE_EXPORTER_PRIVATE_KEY_PASSWORD").String()
+	privateKeyPassword = kingpin.Flag("private-key-password", "The password for the user's RSA private key.").Envar("SNOWFLAKE_EXPORTER_PRIVATE_KEY_PASSPHRASE").String()
 	role               = kingpin.Flag("role", "The role to use when querying metrics.").Default("ACCOUNTADMIN").Envar("SNOWFLAKE_EXPORTER_ROLE").String()
 	warehouse          = kingpin.Flag("warehouse", "The warehouse to use when querying metrics.").Envar("SNOWFLAKE_EXPORTER_WAREHOUSE").Required().String()
 	excludeDeleted     = kingpin.Flag("exclude-deleted-tables", "Exclude deleted tables when collecting table storage metrics.").Default("false").Bool()

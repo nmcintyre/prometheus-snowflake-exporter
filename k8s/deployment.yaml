@@ -1,0 +1,78 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: prometheus-snowflake-exporter
+  labels:
+    app: prometheus-snowflake-exporter
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: prometheus-snowflake-exporter
+  template:
+    metadata:
+      labels:
+        app: prometheus-snowflake-exporter
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "9000"
+    spec:
+      containers:
+      - name: prometheus-snowflake-exporter
+        image: 730335435932.dkr.ecr.us-east-1.amazonaws.com/nmcintyre-kafka-on-eks/prometheus-snowflake-exporter:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 9000
+        args:
+        - "/app/snowflake-exporter"
+        - "--web.listen-address=:9000"
+        - "--log.level=debug"
+        - "--exclude-deleted-tables"
+        volumeMounts:
+        - name: snowflake-private-key
+          mountPath: /app/certs
+          readOnly: true
+        env:
+        # Snowflake configuration
+        - name: SNOWFLAKE_EXPORTER_ACCOUNT
+          valueFrom:
+            secretKeyRef:
+              name: snowflake-prometheus-credentials
+              key: account
+        - name: SNOWFLAKE_EXPORTER_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: snowflake-prometheus-credentials
+              key: user
+        - name: SNOWFLAKE_EXPORTER_PRIVATE_KEY_PATH
+          value: "/app/certs/snowflake_key.p8"
+        - name: SNOWFLAKE_EXPORTER_WAREHOUSE
+          valueFrom:
+            secretKeyRef:
+              name: snowflake-prometheus-credentials
+              key: warehouse
+        - name: SNOWFLAKE_EXPORTER_PRIVATE_KEY_PASSPHRASE
+          valueFrom:
+            secretKeyRef:
+              name: snowflake-prometheus-credentials
+              key: private-key-passphrase
+        - name: SNOWFLAKE_EXPORTER_ROLE
+          valueFrom:
+            secretKeyRef:
+              name: snowflake-prometheus-credentials
+              key: role
+      volumes:
+      - name: snowflake-prometheus-private-key
+        secret:
+          secretName: snowflake-prometheus-private-key
+          items:
+          - key: private-key
+            path: snowflake_key.p8
+      resources:
+        requests:
+          cpu: 500m
+          memory: 1Gi
+        limits:
+          cpu: 1
+          memory: 1Gi
+---

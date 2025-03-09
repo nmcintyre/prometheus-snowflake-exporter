@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: prometheus-snowflake-exporter
+  namespace: kafka
+  labels:
+    app: prometheus-snowflake-exporter
+    release: kube-prometheus-stack
+spec:
+  selector:
+    app: prometheus-snowflake-exporter
+  ports:
+  - name: metrics
+    port: 9000
+    targetPort: 9000
+    protocol: TCP
+  type: ClusterIP
+---

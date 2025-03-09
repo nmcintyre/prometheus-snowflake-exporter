@@ -49,7 +49,7 @@ Alternatively, the exporter may be configured using environment variables:
 | SNOWFLAKE_EXPORTER_USERNAME             | The username for the user used when querying metrics.                            |
 | SNOWFLAKE_EXPORTER_PASSWORD             | The password for the user used when querying metrics.                            |
 | SNOWFLAKE_EXPORTER_PRIVATE_KEY_PATH     | The path to the user's RSA private key file.                                     |
-| SNOWFLAKE_EXPORTER_PRIVATE_KEY_PASSWORD | The password for the user's RSA private key (not required for unencrypted keys). |
+| SNOWFLAKE_EXPORTER_PRIVATE_KEY_PASSPHRASE | The password for the user's RSA private key (not required for unencrypted keys). |
 | SNOWFLAKE_EXPORTER_ROLE                 | The role to use when querying metrics.                                           |
 | SNOWFLAKE_EXPORTER_WAREHOUSE            | The warehouse to use when querying metrics.                                      |
 | SNOWFLAKE_EXPORTER_WEB_TELEMETRY_PATH   | Path under which to expose metrics.                                              |
@@ -80,7 +80,7 @@ SNOWFLAKE_EXPORTER_WAREHOUSE=WAREHOUSE \
 
 The exporter supports RSA authentication in place of a password. Follow [this guide](https://docs.snowflake.com/en/user-guide/key-pair-auth) to configure key-pair authentication in your Snowflake environment.
 
-**Note**: The exporter supports both encrypted and unencrypted private keys. Both example usages below are for encrypted keys. For accurate example usages for environments with an unencrypted private key, remove the `--private-key-password` flag or `SNOWFLAKE_EXPORTER_PRIVATE_KEY_PASSWORD` variable respectively.
+**Note**: The exporter supports both encrypted and unencrypted private keys. Both example usages below are for encrypted keys. For accurate example usages for environments with an unencrypted private key, remove the `--private-key-password` flag or `SNOWFLAKE_EXPORTER_PRIVATE_KEY_PASSPHRASE` variable respectively.
 
 Example usage (flags):
 
@@ -94,7 +94,7 @@ Example usage (environment vars):
 SNOWFLAKE_EXPORTER_ACCOUNT=XXXXXXX-YYYYYYY \
 SNOWFLAKE_EXPORTER_USERNAME=USERNAME \
 SNOWFLAKE_EXPORTER_PRIVATE_KEY_PATH=/PATH/TO/rsa_key.p8 \
-SNOWFLAKE_EXPORTER_PRIVATE_KEY_PASSWORD=RSAPASSWORD \
+SNOWFLAKE_EXPORTER_PRIVATE_KEY_PASSPHRASE=RSAPASSWORD \
 SNOWFLAKE_EXPORTER_ROLE=ACCOUNTADMIN \
 SNOWFLAKE_EXPORTER_WAREHOUSE=WAREHOUSE \
 ./snowflake-exporter
