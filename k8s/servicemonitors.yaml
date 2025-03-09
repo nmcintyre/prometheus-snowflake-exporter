@@ -1,0 +1,21 @@
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: prometheus-snowflake-exporter
+  namespace: kafka
+  labels:
+    release: kube-prometheus-stack
+    app: prometheus-snowflake-exporter
+spec:
+  namespaceSelector:
+    matchNames:
+      - kafka
+  selector:
+    matchLabels:
+      app: prometheus-snowflake-exporter
+  endpoints:
+  - port: metrics  # match the port name from your Service
+    interval: 10m
+    scrapeTimeout: 3m
+---

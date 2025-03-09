@@ -1,0 +1,38 @@
+services:
+  prometheus-snowflake-exporter:
+    environment:
+      SNOWFLAKE_EXPORTER_ACCOUNT: bub59917.us-east-1
+      SNOWFLAKE_EXPORTER_USERNAME: PROMETHEUS_USER
+      SNOWFLAKE_EXPORTER_PRIVATE_KEY_PATH: /run/secrets/private-key.p8
+      SNOWFLAKE_EXPORTER_PRIVATE_KEY_PASSPHRASE: ${SNOWFLAKE_EXPORTER_PRIVATE_KEY_PASSPHRASE}
+      SNOWFLAKE_EXPORTER_ROLE: PROMETHEUS_ROLE
+      SNOWFLAKE_EXPORTER_WAREHOUSE: METRICS_WH
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        SNOWFLAKE_EXPORTER_PRIVATE_KEY_PASSPHRASE: ${SNOWFLAKE_EXPORTER_PRIVATE_KEY_PASSPHRASE}
+    platform: linux/amd64
+    hostname: prometheus-snowflake-exporter
+    container_name: prometheus-snowflake-exporter
+    ports:
+      - 9975:9975
+    restart: always
+    healthcheck:
+      interval: 10s
+      retries: 20
+      test: curl --fail --silent http://prometheus-snowflake-exporter:9975/health --output /dev/null || exit 1
+    secrets:
+      - source: private-key
+        target: /run/secrets/private-key.p8
+    networks:
+      - prometheus-network
+
+networks:
+  prometheus-network:
+    name: prometheus-network
+    driver: bridge
+
+secrets:
+  private-key:
+    file: ./secrets/rsa-key.p8
