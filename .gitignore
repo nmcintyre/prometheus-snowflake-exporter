@@ -26,3 +26,7 @@ mixin/prometheus_alerts.yaml
 
 # Dependency directories (remove the comment below to include it)
 # vendor/
+secrets/*.p8
+secrets/*.pem
+secrets/*password*
+secrets/*passphrase*
